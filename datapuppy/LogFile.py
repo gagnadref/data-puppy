@@ -1,13 +1,17 @@
 import HttpLog
 from datetime import *
 
-class LogFileManager:
+class LogFile:
 	"""
 	LogFileManager is responsible of a log file and provides the new logs
 	"""
-	def __init__(self, filename):
+	def __init__(self, filename, timeslot):
 		self.filename = filename
+		self.timeslot = timeslot
 		self.lastLogDateTime = None
+
+	def getLogs(self):
+		return self.getLogsSinceDateTime(datetime.now()-timedelta(seconds=self.timeslot))
 
 	def getAllLogs(self):
 		with open(self.filename,"r") as logFile:
@@ -39,4 +43,4 @@ class LogFileManager:
 			return logs
 
 	def getLastLogsWithTimeSlot(self,timeSlot):
-		return self.getLogsSinceDateTime(datetime.utcnow()-timedelta(seconds=timeSlot))
+		return self.getLogsSinceDateTime(datetime.now()-timedelta(seconds=timeSlot))

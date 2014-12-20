@@ -28,7 +28,7 @@ class HttpLog:
 			raise ValueError("Cannot find any section in URL")
 
 	def __str__(self):
-		str = "%s %s %s [%s] \"%s\" %s %s \"%s\" \"%s\"\n" %(self.ip, self.client, self.user, self.dateTime.strftime("%d/%b/%Y:%X %z"), self.request, self.status, self.bytes, self.referer, self.agent)
+		str = "%s %s %s [%s] \"%s\" %s %s \"%s\" \"%s\"\n" %(self.ip, self.client, self.user, self.dateTime.strftime("%d/%b/%Y:%X +0000"), self.request, self.status, self.bytes, self.referer, self.agent)
 		return str
 
 class Parser:

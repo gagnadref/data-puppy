@@ -1,11 +1,11 @@
-import LogFileManager
+import LogFile
 import time
-from datetime import datetime
+import datetime
 
 class LogGenerator:
 	def __init__(self, sourceFileName, destinationFilename, requestsByMinute):
-		logFileManager = LogFileManager.LogFileManager(sourceFileName)
-		self.logs = logFileManager.getAllLogs()
+		logFile = LogFile.LogFile(sourceFileName,0)
+		self.logs = logFile.getAllLogs()
 		self.numberOfLogs = len(self.logs)
 		self.destinationFilename = destinationFilename
 		if self.numberOfLogs == 0:
@@ -14,17 +14,19 @@ class LogGenerator:
 
 	def run(self, timeout):
 		startTime = time.time()
-		with open(self.destinationFilename,"w") as destinationFile:
-			i=0
-			while True:
-				if i==self.numberOfLogs:
-					i=0
-				if time.time() > startTime + timeout:
-					break
-				log = self.logs[i]
-				log.dateTime=datetime.now()
+		i=0
+		while True:
+			if i==self.numberOfLogs:
+				i=0
+			if time.time() > startTime + timeout:
+				break
+			log = self.logs[i]
+			log.dateTime=datetime.datetime.now()
+			with open(self.destinationFilename,"a") as destinationFile:
 				destinationFile.write(str(log))
-				time.sleep(60/self.requestsByMinute)
+			i+=1
+			time.sleep(60/self.requestsByMinute)
+
 
 
 

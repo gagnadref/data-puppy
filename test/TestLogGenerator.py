@@ -10,7 +10,7 @@ import unittest
 class TestLogGenerator(unittest.TestCase):
     def test_run(self):
         logGenerator = LogGenerator.LogGenerator(os.path.abspath(os.path.join(resdir, "access.log.template")),
-            os.path.abspath(os.path.join(resdir, "access.log.generated")),
+            os.path.abspath(os.path.join(resdir, "access.log")),
             180)
         logGenerator.run(10)
 

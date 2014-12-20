@@ -1,33 +1,47 @@
 import os
-import LogFileManager
+import threading
 import time
 import Metric
-from datetime import datetime
-from collections import Counter
 
 class DataPuppy:
 	"""
 	DataPuppy monitors a HTTP access log 
 	"""
-	def run(self,filename):
-		logFileManager = LogFileManager.LogFileManager(filename)
+	def __init__(self):
+		self.metrics = []
+		self.alerts = []
 
-		mostVisitedSections = Metric.MostVisitedSections()
-		numberOfRequests = Metric.NumberOfRequests()
+	def run(self, timeout):
+		metricComputation = threading.Thread(None, self.computeAndDisplayMetrics, None, (timeout,), None)
+		alertChecking = threading.Thread(None, self.checkAndDisplayAlerts, None, (timeout,), None)
 
-		highTrafficAlert = Metric.HighTrafficAlert(10)
+		metricComputation.start() 
+		alertChecking.start()
 
+	def computeAndDisplayMetrics(self, timeout):
+		startTime = time.time()
 		while True:
-			newLogs = logFileManager.getNewLogs()
-			mostVisitedSections.compute(newLogs)
-			mostVisitedSections.print()
-			numberOfRequests.compute(newLogs)
-			numberOfRequests.print()
-
-			last2MinutesLogs = logFileManager.getLastLogsWithTimeSlot(120)
-			highTrafficAlert.check(last2MinutesLogs)
-
+			if time.time() > startTime + timeout:
+				break
+			for metric in self.metrics:
+				metric.compute()
+				metric.display()
 			time.sleep(10)
+
+	def checkAndDisplayAlerts(self, timeout):
+		startTime = time.time()
+		while True:
+			if time.time() > startTime + timeout:
+				break
+			for alert in self.alerts:
+				alert.check()
+			time.sleep(1)
+
+	def addMetric(self, metric):
+		self.metrics.append(metric)
+
+	def addAlert(self, alert):
+		self.alerts.append(alert)
 
 
 if __name__ == "__main__":
