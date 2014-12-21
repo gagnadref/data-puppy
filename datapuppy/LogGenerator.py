@@ -14,7 +14,8 @@ class LogGenerator:
 
     def generate(self, requestsPerMinute, period):
         """
-        Adds logs to a destination file, during a given period, with a given traffic
+        Adds logs to a destination file, during a given period, 
+        with a given traffic
         """
         startTime = time.time()
         timeBetweenRequests = 60/requestsPerMinute

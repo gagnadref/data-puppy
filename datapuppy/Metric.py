@@ -72,10 +72,10 @@ class MostVisitedSections(Metric):
     def getValueAsString(self):
         if not self.value:
             return ""
-        s = "Sections of the website with the most hits :\n"
+        message = "Sections of the website with the most hits :\n"
         for (section, visits) in self.value:
-            s += "%s : %i\n" %(section, visits)
-        return s
+            message += "%s : %i\n" %(section, visits)
+        return message
 
 class HighTrafficAlert(Alert):
     def computeValue(self):
@@ -84,6 +84,8 @@ class HighTrafficAlert(Alert):
 
     def updateMessage(self):
         if self.triggered:
-            self.message = "High traffic generated an alert - hits = %i, triggered at %s" %(self.value, datetime.now().strftime("%X"))
+            self.message = "High traffic generated an alert - hits = %i, triggered at %s" %(
+                self.value, datetime.now().strftime("%X"))
         else:
-            self.message = "Alert on high traffic recovered at %s" %datetime.now().strftime("%X")
+            self.message = "Alert on high traffic recovered at %s" %(
+                datetime.now().strftime("%X"))

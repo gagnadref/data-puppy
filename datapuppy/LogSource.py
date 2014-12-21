@@ -14,10 +14,12 @@ class LogSource:
 
     def getLogs(self):
         """
-        getLogs updates the logs only if it has not been updated recently (in the last second), then return them
+        getLogs updates the logs only if it has not been updated 
+        recently (in the last second), then return them
         """
         now = datetime.now()
-        if not self.lastFetch or now - timedelta(seconds=1) > self.lastFetch :
+        if (not self.lastFetch or 
+            now - timedelta(seconds=1) > self.lastFetch):
             self.removeOldLogs(now)
             self.addNewLogs(now)
             self.lastFetch = now
@@ -26,7 +28,8 @@ class LogSource:
     def removeOldLogs(self, now):
         i = 0
         length = len(self.logs)
-        while i<length and self.logs[i].dateTime < now - timedelta(seconds=self.timeslot):
+        while (i<length and 
+            self.logs[i].dateTime < now - timedelta(seconds=self.timeslot)):
             i+=1
         self.logs = self.logs[i:]
 

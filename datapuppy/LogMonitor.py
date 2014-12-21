@@ -16,8 +16,12 @@ class LogMonitor:
         self.alertMessages = []
 
     def run(self, timeout):
-        metricComputation = threading.Thread(None, self.computeAndDisplayMetrics, None, (timeout,), None)
-        alertChecking = threading.Thread(None, self.checkAndDisplayAlerts, None, (timeout,), None)
+        metricComputation = threading.Thread(
+            target=self.computeAndDisplayMetrics, 
+            args=(timeout,))
+        alertChecking = threading.Thread(
+            target=self.checkAndDisplayAlerts, 
+            args=(timeout,))
 
         metricComputation.start() 
         alertChecking.start()
@@ -53,7 +57,8 @@ class LogMonitor:
 
     def display(self):
         print("********************************************************************************")
-        print("************************ Application status at %s ************************" %datetime.now().strftime("%X"))
+        print("************************ Application status at %s ************************" 
+            %datetime.now().strftime("%X"))
         print("********************************************************************************")
         for metricMessage in self.metricMessages:
             print(metricMessage)
