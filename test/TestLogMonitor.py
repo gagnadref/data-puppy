@@ -5,11 +5,11 @@ sys.path.insert(0, os.path.abspath(os.path.join(testdir, srcdir)))
 
 from datetime import datetime
 import threading
+import unittest
 import LogMonitor
 import LogGenerator
 import LogSource
 import Metric
-import unittest
 
 class TestLogMonitor(unittest.TestCase):
     def generateLogs(self):

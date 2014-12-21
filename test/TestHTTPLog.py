@@ -4,8 +4,8 @@ srcdir = '../datapuppy'
 sys.path.insert(0, os.path.abspath(os.path.join(testdir, srcdir)))
 
 from datetime import datetime
-import HttpLog
 import unittest
+import HttpLog
 
 class TestHttpLog(unittest.TestCase):
     def test_parse(self):

@@ -1,15 +1,16 @@
 import sys, os
-import threading
-import time
-from datetime import datetime, timedelta
+
 testdir = os.path.dirname(__file__)
 srcdir = '../datapuppy'
 resdir = os.path.join(testdir, "resources/access.log")
 sys.path.insert(0, os.path.abspath(os.path.join(testdir, srcdir)))
 
+import threading
+import time
+from datetime import datetime, timedelta
+import unittest
 import LogSource
 import LogGenerator
-import unittest
 
 class TestLogSource(unittest.TestCase):
 	def test_getAllLogs(self):

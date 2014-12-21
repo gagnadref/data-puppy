@@ -1,5 +1,5 @@
-import HttpLog
 from datetime import *
+import HttpLog
 
 class LogSource:
 	"""

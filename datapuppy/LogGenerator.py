@@ -1,6 +1,6 @@
-import LogSource
 import time
 import datetime
+import LogSource
 
 class LogGenerator:
 	def __init__(self, sourceFileName, destinationFilename, trafficSequence):

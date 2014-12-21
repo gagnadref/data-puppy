@@ -1,7 +1,6 @@
 import os
 import threading
 import time
-import Metric
 from datetime import datetime
 
 class LogMonitor:

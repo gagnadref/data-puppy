@@ -1,5 +1,5 @@
 import re
-from datetime import *
+from datetime import datetime
 
 class HttpLog:
 	def __init__(self, ip, client, user, dateTime, request, status, bytes, referer, agent):
