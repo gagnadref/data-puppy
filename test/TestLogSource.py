@@ -13,7 +13,7 @@ import unittest
 
 class TestLogSource(unittest.TestCase):
 	def test_getAllLogs(self):
-		logSource = LogSource.LogSource(os.path.abspath(os.path.join(testdir, "resources/access.log.template")),float('inf'))
+		logSource = LogSource.LogSource(os.path.abspath(os.path.join(testdir, "resources/access.log.template")),None)
 		self.assertEqual(len(logSource.getAllLogs()),3)
 
 	def generateLogs(self):

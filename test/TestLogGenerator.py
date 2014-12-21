@@ -11,7 +11,7 @@ class TestLogGenerator(unittest.TestCase):
     def test_run(self):
         logGenerator = LogGenerator.LogGenerator(os.path.abspath(os.path.join(resdir, "access.log.template")),
             os.path.abspath(os.path.join(resdir, "access.log")),
-            [(60,60),(180,10),(60,60)])
+            [(60,10),(180,5),(60,10)])
         logGenerator.run()
 
 if __name__ == '__main__':
