@@ -7,7 +7,7 @@ from datetime import datetime
 import threading
 import DataPuppy
 import LogGenerator
-import LogFile
+import LogSource
 import Metric
 import unittest
 
@@ -24,12 +24,12 @@ class TestDataPuppy(unittest.TestCase):
 
         dataPuppy = DataPuppy.DataPuppy()
 
-        logFileForMetrics = LogFile.LogFile(filename,timeslot=10)
-        logFileForAlerts = LogFile.LogFile(filename,timeslot=120)
+        logSourceForMetrics = LogSource.LogSource(filename,timeslot=10)
+        logSourceForAlerts = LogSource.LogSource(filename,timeslot=120)
 
-        numberOfRequests = Metric.NumberOfRequests(logFileForMetrics)
-        mostVisitedSections = Metric.MostVisitedSections(logFileForMetrics)
-        highTrafficAlert = Metric.HighTrafficAlert(logFileForAlerts,threshold=65)
+        numberOfRequests = Metric.NumberOfRequests(logSourceForMetrics)
+        mostVisitedSections = Metric.MostVisitedSections(logSourceForMetrics)
+        highTrafficAlert = Metric.HighTrafficAlert(logSourceForAlerts,threshold=65)
 
         dataPuppy.addMetric(numberOfRequests)
         dataPuppy.addMetric(mostVisitedSections)

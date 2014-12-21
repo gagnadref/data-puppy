@@ -2,8 +2,8 @@ from collections import Counter
 from datetime import datetime
 
 class Metric:
-	def __init__(self, logFile):
-		self.logFile = logFile
+	def __init__(self, logSource):
+		self.logSource = logSource
 		self.value = None
 
 	def computeValue(self):
@@ -13,8 +13,8 @@ class Metric:
 		raise Exception("Abstract method should have been implemented")
 
 class Alert(Metric):
-	def __init__(self, logFile, threshold):
-		super().__init__(logFile)
+	def __init__(self, logSource, threshold):
+		super().__init__(logSource)
 		self.threshold = threshold
 		self.triggered = False
 		self.message = ""
@@ -47,22 +47,22 @@ class Alert(Metric):
 		raise Exception("Abstract method should have been implemented")
 
 class NumberOfRequests(Metric):
-	def __init__(self, logFile):
-		super().__init__(logFile)
+	def __init__(self, logSource):
+		super().__init__(logSource)
 
 	def computeValue(self):
-		logs = self.logFile.getLogs()
+		logs = self.logSource.getLogs()
 		self.value = len(logs)
 
 	def getValueAsString(self):
 		return "Number of requests in the last 10s: %i" %self.value
 
 class MostVisitedSections(Metric):
-	def __init__(self, logFile):
-		super().__init__(logFile)
+	def __init__(self, logSource):
+		super().__init__(logSource)
 
 	def computeValue(self):
-		logs = self.logFile.getLogs()
+		logs = self.logSource.getLogs()
 		requests = [log.getSection() for log in logs]
 		self.value = Counter(requests).most_common(10)
 
@@ -76,11 +76,11 @@ class MostVisitedSections(Metric):
 		return s
 
 class HighTrafficAlert(Alert):
-	def __init__(self, logFile, threshold):
-		super().__init__(logFile, threshold)
+	def __init__(self, logSource, threshold):
+		super().__init__(logSource, threshold)
 
 	def computeValue(self):
-		logs = self.logFile.getLogs()
+		logs = self.logSource.getLogs()
 		self.value = len(logs)/2
 
 	def updateMessage(self):

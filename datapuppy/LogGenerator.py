@@ -1,11 +1,11 @@
-import LogFile
+import LogSource
 import time
 import datetime
 
 class LogGenerator:
 	def __init__(self, sourceFileName, destinationFilename, trafficSequence):
-		logFile = LogFile.LogFile(sourceFileName,0)
-		self.logs = logFile.getAllLogs()
+		logSource = LogSource.LogSource(sourceFileName,0)
+		self.logs = logSource.getAllLogs()
 		self.numberOfLogs = len(self.logs)
 		self.destinationFilename = destinationFilename
 		if self.numberOfLogs == 0:
@@ -30,4 +30,3 @@ class LogGenerator:
 	def run(self):
 		for (requestsByMinute, timeout) in self.trafficSequence:
 			self.generate(requestsByMinute, timeout)
-			
