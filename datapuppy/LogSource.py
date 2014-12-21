@@ -3,7 +3,7 @@ import HttpLog
 
 class LogSource:
     """
-    LogSource provides the logs of a given log file within a time slot
+    Provides the logs of a given log file within a time slot
     """
     def __init__(self, filename, timeslot):
         self.filename = filename
@@ -14,7 +14,7 @@ class LogSource:
 
     def getLogs(self):
         """
-        getLogs updates the logs only if it has not been updated 
+        Updates the logs only if it has not been updated 
         recently (in the last second), then return them
         """
         now = datetime.now()
@@ -35,7 +35,7 @@ class LogSource:
 
     def addNewLogs(self, now):
         """
-        addNewLogs adds new logs without reading the whole file
+        Adds new logs without reading the whole file
         """
         with open(self.filename,"r") as logFile:
             logFile.seek(self.currentPositionInFile)

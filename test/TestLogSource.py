@@ -16,7 +16,7 @@ class TestLogSource(unittest.TestCase):
         logSource = LogSource.LogSource(
             os.path.abspath(os.path.join(testdir, "resources/access.log.template")),
             None)
-        self.assertEqual(len(logSource.getAllLogs()),3)
+        self.assertEqual(len(logSource.getAllLogs()),17)
 
     def generateLogs(self):
         logGenerator = LogGenerator.LogGenerator(
@@ -36,9 +36,11 @@ class TestLogSource(unittest.TestCase):
         for i in range(0,2):
             time.sleep(5)
             now = datetime.now()
+            print(now)
             logs = logSource.getLogs()
             self.assertTrue(len(logs)>0)
             for log in logs:
+                print(log.dateTime)
                 self.assertTrue(
                     log.dateTime >= now - timedelta(seconds=timeslot))
 

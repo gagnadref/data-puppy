@@ -2,17 +2,23 @@ from collections import Counter
 from datetime import datetime
 
 class Metric:
+    """
+    Abstract class to create statistics on logs
+    """
     def __init__(self, logSource):
         self.logSource = logSource
         self.value = None
 
     def computeValue(self):
-        raise Exception("Abstract method should have been implemented")
+        raise Exception("Abstract method computeValue should have been implemented")
 
     def getValueAsString(self):
-        raise Exception("Abstract method should have been implemented")
+        raise Exception("Abstract method getValueAsString should have been implemented")
 
 class Alert(Metric):
+    """
+    Abstract class to create alerts on statistics
+    """
     def __init__(self, logSource, threshold):
         super().__init__(logSource)
         self.threshold = threshold
@@ -44,9 +50,12 @@ class Alert(Metric):
         return self.message
 
     def updateMessage(self):
-        raise Exception("Abstract method should have been implemented")
+        raise Exception("Abstract method updateMessage should have been implemented")
 
 class NumberOfRequests(Metric):
+    """
+    Number of requests to the website in the last 10s
+    """
     def computeValue(self):
         logs = self.logSource.getLogs()
         self.value = len(logs)
@@ -55,6 +64,9 @@ class NumberOfRequests(Metric):
         return "Number of requests in the last 10s : %i" %self.value
 
 class UniqueVisitors(Metric):
+    """
+    Number of unique visitors of the website in the last 10s
+    """
     def computeValue(self):
         logs = self.logSource.getLogs()
         ip = Counter(map(lambda log: log.ip, logs))
@@ -64,6 +76,9 @@ class UniqueVisitors(Metric):
         return "Unique visitors : %i" %self.value
 
 class MostVisitedSections(Metric):
+    """
+    Sections of the website with the most hits
+    """
     def computeValue(self):
         logs = self.logSource.getLogs()
         requests = [log.getSection() for log in logs]
@@ -78,6 +93,9 @@ class MostVisitedSections(Metric):
         return message
 
 class HighTrafficAlert(Alert):
+    """
+    Alert when the number of requests per minute exceeds a threshold
+    """
     def computeValue(self):
         logs = self.logSource.getLogs()
         self.value = len(logs)/2

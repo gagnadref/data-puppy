@@ -2,12 +2,16 @@ import re
 from datetime import datetime
 
 class HttpLog:
+    """
+    Represents a w3c-formatted HTTP log
+    """
     def __init__(self, ip, client, user, dateTime, 
             request, status, bytes, referer, agent):
         self.ip = ip
         self.client = client
         self.user = user
-        self.dateTime = datetime.strptime(dateTime,"%d/%b/%Y:%X %z").replace(tzinfo=None)
+        self.dateTime = datetime.strptime(dateTime,"%d/%b/%Y:%X %z")
+        self.dateTime = self.dateTime.replace(tzinfo=None) # timezone is not used because we don't need it and it's more convenient 
         self.request = request
         self.status = int(status)
         self.bytes = int(bytes)

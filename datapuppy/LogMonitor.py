@@ -5,7 +5,7 @@ from datetime import datetime
 
 class LogMonitor:
     """
-    Monitors metrics and alerts and displays the results in the console 
+    Monitors metrics and alerts, and displays the results in the console 
     """
     def __init__(self, metricTimeslot, alertTimeslot):
         self.metricTimeslot = metricTimeslot

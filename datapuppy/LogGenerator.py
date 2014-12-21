@@ -3,6 +3,9 @@ import datetime
 import LogSource
 
 class LogGenerator:
+    """
+    Generates a w3c-formatted HTTP access log
+    """
     def __init__(self, sourceFileName, destinationFilename, trafficSequence):
         logSource = LogSource.LogSource(sourceFileName,0)
         self.logs = logSource.getAllLogs()
