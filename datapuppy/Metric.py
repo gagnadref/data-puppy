@@ -54,14 +54,15 @@ class Alert(Metric):
 
 class NumberOfRequests(Metric):
     """
-    Number of requests to the website in the last 10s
+    Number of requests to the website in the last period
     """
     def computeValue(self):
         logs = self.logSource.getLogs()
         self.value = len(logs)
 
     def getValueAsString(self):
-        return "Number of requests in the last 10s : %i" %self.value
+        return "Number of requests in the last %is : %i" %(
+            self.logSource.timeslot, self.value)
 
 class UniqueVisitors(Metric):
     """
@@ -98,7 +99,7 @@ class HighTrafficAlert(Alert):
     """
     def computeValue(self):
         logs = self.logSource.getLogs()
-        self.value = len(logs)/2
+        self.value = len(logs)*60/self.logSource.timeslot
 
     def updateMessage(self):
         if self.triggered:
