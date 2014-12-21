@@ -9,7 +9,7 @@ class Metric:
 	def computeValue(self):
 		raise Exception("Abstract method should have been implemented")
 
-	def display(self):
+	def getValueAsString(self):
 		raise Exception("Abstract method should have been implemented")
 
 class Alert(Metric):
@@ -17,23 +17,34 @@ class Alert(Metric):
 		super().__init__(logFile)
 		self.threshold = threshold
 		self.triggered = False
+		self.message = ""
 
-	def check(self):
+	def hasStatusChanged(self):
 		self.computeValue()
 		if self.triggered:
-			self.checkIfDropsBelow()
+			return self.hasValueDroppedBelowThreshold()
 		else:
-			self.checkIfExceeds()
+			return self.hasValueExceededThreshold()
 
-	def checkIfExceeds(self):
+	def hasValueExceededThreshold(self):
 		if self.value >= self.threshold:
 			self.triggered = True
-			self.display()
+			self.updateMessage()
+			return True
+		return False
 			
-	def checkIfDropsBelow(self):
+	def hasValueDroppedBelowThreshold(self):
 		if self.value < self.threshold:
 			self.triggered = False
-			self.display()
+			self.updateMessage()
+			return True
+		return False
+
+	def getValueAsString(self):
+		return self.message
+
+	def updateMessage(self):
+		raise Exception("Abstract method should have been implemented")
 
 class NumberOfRequests(Metric):
 	def __init__(self, logFile):
@@ -43,8 +54,8 @@ class NumberOfRequests(Metric):
 		logs = self.logFile.getLogs()
 		self.value = len(logs)
 
-	def display(self):
-		print("Total number of requests: %i" %self.value)
+	def getValueAsString(self):
+		return "Number of requests in the last 10s: %i" %self.value
 
 class MostVisitedSections(Metric):
 	def __init__(self, logFile):
@@ -55,10 +66,14 @@ class MostVisitedSections(Metric):
 		requests = [log.getSection() for log in logs]
 		self.value = Counter(requests).most_common(10)
 
-	def display(self):
-		print("Sections of the web site with the most hits:")
+	def getValueAsString(self):
+		if not self.value:
+			return ""
+		s = "Sections of the website with the most hits:"
 		for section in self.value:
-			print(section)
+			s += "\n"
+			s += str(section)
+		return s
 
 class HighTrafficAlert(Alert):
 	def __init__(self, logFile, threshold):
@@ -68,8 +83,8 @@ class HighTrafficAlert(Alert):
 		logs = self.logFile.getLogs()
 		self.value = len(logs)/2
 
-	def display(self):
+	def updateMessage(self):
 		if self.triggered:
-			print("High traffic generated an alert - hits = %i, triggered at %s" %(self.value, datetime.now().strftime("%X")))
+			self.message = "High traffic generated an alert - hits = %i, triggered at %s" %(self.value, datetime.now().strftime("%X"))
 		else:
-			print("Alert on high traffic recovered at %s" %datetime.now().strftime("%X"))
+			self.message = "Alert on high traffic recovered at %s" %datetime.now().strftime("%X")

@@ -2,6 +2,7 @@ import os
 import threading
 import time
 import Metric
+from datetime import datetime
 
 class DataPuppy:
 	"""
@@ -10,6 +11,8 @@ class DataPuppy:
 	def __init__(self):
 		self.metrics = []
 		self.alerts = []
+		self.metricMessages = []
+		self.alertMessages = []
 
 	def run(self, timeout):
 		metricComputation = threading.Thread(None, self.computeAndDisplayMetrics, None, (timeout,), None)
@@ -23,9 +26,11 @@ class DataPuppy:
 		while True:
 			if time.time() > startTime + timeout:
 				break
+			self.metricMessages = []
 			for metric in self.metrics:
 				metric.computeValue()
-				metric.display()
+				self.metricMessages.append(metric.getValueAsString())
+			self.display()
 			time.sleep(10)
 
 	def checkAndDisplayAlerts(self, timeout):
@@ -34,7 +39,9 @@ class DataPuppy:
 			if time.time() > startTime + timeout:
 				break
 			for alert in self.alerts:
-				alert.check()
+				if alert.hasStatusChanged():
+					self.alertMessages.append(alert.getValueAsString())
+					self.display()
 			time.sleep(1)
 
 	def addMetric(self, metric):
@@ -43,6 +50,15 @@ class DataPuppy:
 	def addAlert(self, alert):
 		self.alerts.append(alert)
 
+	def display(self):
+		print("\n******************************************************************")
+		print(datetime.now().strftime("%X"))
+		for metricMessage in self.metricMessages:
+			print(metricMessage)
+		if self.alertMessages:	
+			print("Recent Alerts:")
+		for alertMessage in self.alertMessages:
+			print(alertMessage)
 
 if __name__ == "__main__":
 	DataPuppy().run(os.path.abspath(os.path.join(os.path.dirname(__file__), "resources/access.log")))
