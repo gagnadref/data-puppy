@@ -15,8 +15,8 @@ class TestDataPuppy(unittest.TestCase):
     def generateLogs(self):
         logGenerator = LogGenerator.LogGenerator(os.path.abspath(os.path.join(testdir, "resources/access.log.template")),
             os.path.abspath(os.path.join(testdir, "resources/access.log")),
-            180)
-        logGenerator.run(30)
+            [(60,60),(180,10),(60,60)])
+        logGenerator.run()
 
     
     def runDataPuppy(self):
@@ -29,13 +29,13 @@ class TestDataPuppy(unittest.TestCase):
 
         mostVisitedSections = Metric.MostVisitedSections(logFileForMetrics)
         numberOfRequests = Metric.NumberOfRequests(logFileForMetrics)
-        highTrafficAlert = Metric.HighTrafficAlert(logFileForAlerts,threshold=10)
+        highTrafficAlert = Metric.HighTrafficAlert(logFileForAlerts,threshold=65)
 
         dataPuppy.addMetric(mostVisitedSections)
         dataPuppy.addMetric(numberOfRequests)
         dataPuppy.addAlert(highTrafficAlert)
 
-        dataPuppy.run(timeout=30)
+        dataPuppy.run(timeout=240)
 
     def test_run(self):
         logGeneration = threading.Thread(None, self.generateLogs, None, (), None)

@@ -63,14 +63,14 @@ class HighTrafficAlert(Alert):
 
 	def checkIfExceeds(self):
 		logs = self.logFile.getLogs()
-		if len(logs) >= self.threshold:
-			self.result = len(logs)
+		if len(logs)/2 >= self.threshold:
+			self.result = len(logs)/2
 			self.triggered = True
 			self.display()
 			
 	def checkIfDropsBelow(self):
 		logs = self.logFile.getLogs()
-		if len(logs) < self.threshold:
+		if len(logs)/2 < self.threshold:
 			self.triggered = False
 			self.display()
 
