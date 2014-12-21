@@ -52,7 +52,7 @@ class NumberOfRequests(Metric):
 		self.value = len(logs)
 
 	def getValueAsString(self):
-		return "Number of requests in the last 10s: %i" %self.value
+		return "Number of requests in the last 10s : %i" %self.value
 
 class UniqueVisitors(Metric):
 	def computeValue(self):
@@ -61,7 +61,7 @@ class UniqueVisitors(Metric):
 		self.value = len(ip.keys())
 
 	def getValueAsString(self):
-		return "Unique visitors: %i" %self.value
+		return "Unique visitors : %i" %self.value
 
 class MostVisitedSections(Metric):
 	def computeValue(self):
@@ -72,10 +72,9 @@ class MostVisitedSections(Metric):
 	def getValueAsString(self):
 		if not self.value:
 			return ""
-		s = "Sections of the website with the most hits:"
-		for section in self.value:
-			s += "\n"
-			s += str(section)
+		s = "Sections of the website with the most hits :\n"
+		for (section, visits) in self.value:
+			s += "%s : %i\n" %(section, visits)
 		return s
 
 class HighTrafficAlert(Alert):

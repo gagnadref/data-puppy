@@ -4,11 +4,13 @@ import time
 import Metric
 from datetime import datetime
 
-class DataPuppy:
+class LogMonitor:
 	"""
-	DataPuppy monitors a HTTP access log 
+	Monitors metrics and alerts and displays the results in the console 
 	"""
-	def __init__(self):
+	def __init__(self, metricTimeslot, alertTimeslot):
+		self.metricTimeslot = metricTimeslot
+		self.alertTimeslot = alertTimeslot
 		self.metrics = []
 		self.alerts = []
 		self.metricMessages = []
@@ -31,7 +33,7 @@ class DataPuppy:
 				metric.computeValue()
 				self.metricMessages.append(metric.getValueAsString())
 			self.display()
-			time.sleep(10)
+			time.sleep(self.metricTimeslot)
 
 	def checkAndDisplayAlerts(self, timeout):
 		startTime = time.time()
@@ -42,7 +44,7 @@ class DataPuppy:
 				if alert.hasStatusChanged():
 					self.alertMessages.append(alert.getValueAsString())
 					self.display()
-			time.sleep(1)
+			time.sleep(self.alertTimeslot)
 
 	def addMetric(self, metric):
 		self.metrics.append(metric)
@@ -51,14 +53,13 @@ class DataPuppy:
 		self.alerts.append(alert)
 
 	def display(self):
-		print("\n******************************************************************")
-		print(datetime.now().strftime("%X"))
+		print("********************************************************************************")
+		print("************************ Application status at %s ************************" %datetime.now().strftime("%X"))
+		print("********************************************************************************")
 		for metricMessage in self.metricMessages:
 			print(metricMessage)
 		if self.alertMessages:	
-			print("Recent Alerts:")
-		for alertMessage in self.alertMessages:
-			print(alertMessage)
-
-if __name__ == "__main__":
-	DataPuppy().run(os.path.abspath(os.path.join(os.path.dirname(__file__), "resources/access.log")))
+			print("Recent Alerts :")
+			for alertMessage in self.alertMessages:
+				print(alertMessage)
+			print("")

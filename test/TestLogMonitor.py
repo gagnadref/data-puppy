@@ -5,24 +5,26 @@ sys.path.insert(0, os.path.abspath(os.path.join(testdir, srcdir)))
 
 from datetime import datetime
 import threading
-import DataPuppy
+import LogMonitor
 import LogGenerator
 import LogSource
 import Metric
 import unittest
 
-class TestDataPuppy(unittest.TestCase):
+class TestLogMonitor(unittest.TestCase):
     def generateLogs(self):
         logGenerator = LogGenerator.LogGenerator(os.path.abspath(os.path.join(testdir, "resources/access.log.template")),
             os.path.abspath(os.path.join(testdir, "resources/access.log")),
             [(60,60),(180,10),(60,60)])
         logGenerator.run()
 
-    
-    def runDataPuppy(self):
+    def test_run(self):
+        logGeneration = threading.Thread(None, self.generateLogs, None, (), None)
+        logGeneration.start()
+
         filename = os.path.abspath(os.path.join(testdir, "resources/access.log"))
 
-        dataPuppy = DataPuppy.DataPuppy()
+        logMonitor = LogMonitor.LogMonitor(10,1)
 
         logSourceForMetrics = LogSource.LogSource(filename,timeslot=10)
         logSourceForAlerts = LogSource.LogSource(filename,timeslot=120)
@@ -32,19 +34,12 @@ class TestDataPuppy(unittest.TestCase):
         mostVisitedSections = Metric.MostVisitedSections(logSourceForMetrics)
         highTrafficAlert = Metric.HighTrafficAlert(logSourceForAlerts,threshold=65)
 
-        dataPuppy.addMetric(numberOfRequests)
-        dataPuppy.addMetric(uniqueVisitors)
-        dataPuppy.addMetric(mostVisitedSections)
-        dataPuppy.addAlert(highTrafficAlert)
+        logMonitor.addMetric(numberOfRequests)
+        logMonitor.addMetric(uniqueVisitors)
+        logMonitor.addMetric(mostVisitedSections)
+        logMonitor.addAlert(highTrafficAlert)
 
-        dataPuppy.run(timeout=240)
-
-    def test_run(self):
-        logGeneration = threading.Thread(None, self.generateLogs, None, (), None)
-        dataPuppy = threading.Thread(None, self.runDataPuppy, None, (), None)
-
-        logGeneration.start()
-        dataPuppy.start()
+        logMonitor.run(timeout=180)
 
 if __name__ == '__main__':
     unittest.main()
