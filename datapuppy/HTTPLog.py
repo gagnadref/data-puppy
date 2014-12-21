@@ -41,7 +41,7 @@ class HttpLog:
 
 class Parser:
     """
-    The parser parses a w3c-formatted HTTP access log into a HttpLog
+    The parser parses a w3c-formatted HTTP log string into a HttpLog
     """
     ip = "(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})?"
     client = "(\\S+)"

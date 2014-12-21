@@ -36,11 +36,9 @@ class TestLogSource(unittest.TestCase):
         for i in range(0,2):
             time.sleep(5)
             now = datetime.now()
-            print(now)
             logs = logSource.getLogs()
             self.assertTrue(len(logs)>0)
             for log in logs:
-                print(log.dateTime)
                 self.assertTrue(
                     log.dateTime >= now - timedelta(seconds=timeslot))
 
