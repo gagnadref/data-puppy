@@ -24,7 +24,7 @@ class DataPuppy:
 			if time.time() > startTime + timeout:
 				break
 			for metric in self.metrics:
-				metric.compute()
+				metric.computeValue()
 				metric.display()
 			time.sleep(10)
 
