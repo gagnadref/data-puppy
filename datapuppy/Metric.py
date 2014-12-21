@@ -47,9 +47,6 @@ class Alert(Metric):
 		raise Exception("Abstract method should have been implemented")
 
 class NumberOfRequests(Metric):
-	def __init__(self, logSource):
-		super().__init__(logSource)
-
 	def computeValue(self):
 		logs = self.logSource.getLogs()
 		self.value = len(logs)
@@ -57,10 +54,16 @@ class NumberOfRequests(Metric):
 	def getValueAsString(self):
 		return "Number of requests in the last 10s: %i" %self.value
 
-class MostVisitedSections(Metric):
-	def __init__(self, logSource):
-		super().__init__(logSource)
+class UniqueVisitors(Metric):
+	def computeValue(self):
+		logs = self.logSource.getLogs()
+		ip = Counter(map(lambda log: log.ip, logs))
+		self.value = len(ip.keys())
 
+	def getValueAsString(self):
+		return "Unique visitors: %i" %self.value
+
+class MostVisitedSections(Metric):
 	def computeValue(self):
 		logs = self.logSource.getLogs()
 		requests = [log.getSection() for log in logs]
@@ -76,9 +79,6 @@ class MostVisitedSections(Metric):
 		return s
 
 class HighTrafficAlert(Alert):
-	def __init__(self, logSource, threshold):
-		super().__init__(logSource, threshold)
-
 	def computeValue(self):
 		logs = self.logSource.getLogs()
 		self.value = len(logs)/2

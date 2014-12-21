@@ -28,10 +28,12 @@ class TestDataPuppy(unittest.TestCase):
         logSourceForAlerts = LogSource.LogSource(filename,timeslot=120)
 
         numberOfRequests = Metric.NumberOfRequests(logSourceForMetrics)
+        uniqueVisitors = Metric.UniqueVisitors(logSourceForMetrics)
         mostVisitedSections = Metric.MostVisitedSections(logSourceForMetrics)
         highTrafficAlert = Metric.HighTrafficAlert(logSourceForAlerts,threshold=65)
 
         dataPuppy.addMetric(numberOfRequests)
+        dataPuppy.addMetric(uniqueVisitors)
         dataPuppy.addMetric(mostVisitedSections)
         dataPuppy.addAlert(highTrafficAlert)
 
