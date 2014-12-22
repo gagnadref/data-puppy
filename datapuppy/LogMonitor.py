@@ -1,7 +1,10 @@
 import os
+import sys
 import threading
 import time
 from datetime import datetime
+import LogSource
+import Metric
 
 class LogMonitor:
     """
@@ -67,3 +70,26 @@ class LogMonitor:
             for alertMessage in self.alertMessages:
                 print(alertMessage)
             print("")
+
+if __name__ == '__main__':
+        if len(sys.argv)<2:
+            raise Exception("Must provide the path to the monitored access.log")
+
+        filename = sys.argv[1]
+
+        logMonitor = LogMonitor(10,1)
+
+        logSourceForMetrics = LogSource.LogSource(filename,10)
+        logSourceForAlerts = LogSource.LogSource(filename,120)
+
+        numberOfRequests = Metric.NumberOfRequests(logSourceForMetrics)
+        uniqueVisitors = Metric.UniqueVisitors(logSourceForMetrics)
+        mostVisitedSections = Metric.MostVisitedSections(logSourceForMetrics)
+        highTrafficAlert = Metric.HighTrafficAlert(logSourceForAlerts,65)
+
+        logMonitor.addMetric(numberOfRequests)
+        logMonitor.addMetric(uniqueVisitors)
+        logMonitor.addMetric(mostVisitedSections)
+        logMonitor.addAlert(highTrafficAlert)
+
+        logMonitor.run(timeout=float('inf'))
